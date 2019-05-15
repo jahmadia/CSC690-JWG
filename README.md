@@ -1,11 +1,10 @@
 
-                                              Final Project Milestone 1
+                                                     Final Project 
                                                       Jed Ahmadia
                                                  Gebrezgabiher Mengis
                                                         
 
-
-
+  Milestone 1:
 
 
 Group Members:
@@ -53,3 +52,24 @@ Owners of Each Feature:
     - Keeps score when obtaining item: Gebrezgabiher
     - Images(Right Dimensions): Gebrezgabiher
 
+
+
+
+
+
+Milestone 2:
+
+
+Wire-Frames: 
+
+  Wire Frames in the code.
+  
+  
+Must-Have-Features:
+
+
+   - Must fly on touch
+    - Dies on collision
+    - Restart when dies
+    - Keeps score when obtaining item
+    - Images
