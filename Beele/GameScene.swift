@@ -2,7 +2,7 @@
 //  GameScene.swift
 //  Beele
 //
-//  Created by RCMACEXT-34 on 5/14/19.
+//  Created by RCMACEXT-34 on 4/28/19.
 //  Copyright © 2019 GerryANDJed. All rights reserved.
 //
 
@@ -43,23 +43,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             })
             taptoplayLbl.removeFromParent()
             self.bird.run(repeatActionbird)
-
+            
             let spawn = SKAction.run({
                 () in
                 self.wallPair = self.createWalls()
                 self.addChild(self.wallPair)
             })
-
+            
             let delay = SKAction.wait(forDuration: 1.5)
             let SpawnDelay = SKAction.sequence([spawn, delay])
             let spawnDelayForever = SKAction.repeatForever(SpawnDelay)
             self.run(spawnDelayForever)
-
+            
             let distance = CGFloat(self.frame.width + wallPair.frame.width)
             let movePipes = SKAction.moveBy(x: -distance - 50, y: 0, duration: TimeInterval(0.008 * distance))
             let removePipes = SKAction.removeFromParent()
             moveAndRemove = SKAction.sequence([movePipes, removePipes])
-
+            
             bird.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             bird.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 40))
         } else {
@@ -68,7 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 bird.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 40))
             }
         }
-
+        
         for touch in touches{
             let location = touch.location(in: self)
             if died == true{
@@ -138,5 +138,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //ANIMATE THE BIRD AND REPEAT THE ANIMATION FOREVER
         let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
         self.repeatActionbird = SKAction.repeatForever(animatebird)
+        
+        scoreLbl = createScoreLabel()
+        self.addChild(scoreLbl)
+        
+        highscoreLbl = createHighscoreLabel()
+        self.addChild(highscoreLbl)
+        
+        
+        taptoplayLbl = createTaptoplayLabel()
+        self.addChild(taptoplayLbl)
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        let firstBody = contact.bodyA
+        let secondBody = contact.bodyB
+        
+        if firstBody.categoryBitMask == CollisionBitMask.birdCategory && secondBody.categoryBitMask == CollisionBitMask.pillarCategory || firstBody.categoryBitMask == CollisionBitMask.pillarCategory && secondBody.categoryBitMask == CollisionBitMask.birdCategory || firstBody.categoryBitMask == CollisionBitMask.birdCategory && secondBody.categoryBitMask == CollisionBitMask.groundCategory || firstBody.categoryBitMask == CollisionBitMask.groundCategory && secondBody.categoryBitMask == CollisionBitMask.birdCategory{
+            enumerateChildNodes(withName: "wallPair", using: ({
+                (node, error) in
+                node.speed = 0
+                self.removeAllActions()
+            }))
+            if died == false{
+                died = true
+                createRestartBtn()
+                pauseBtn.removeFromParent()
+                self.bird.removeAllActions()
+            }
+        } else if firstBody.categoryBitMask == CollisionBitMask.birdCategory && secondBody.categoryBitMask == CollisionBitMask.flowerCategory {
+            score += 1
+            scoreLbl.text = "\(score)"
+            secondBody.node?.removeFromParent()
+        } else if firstBody.categoryBitMask == CollisionBitMask.flowerCategory && secondBody.categoryBitMask == CollisionBitMask.birdCategory {
+            score += 1
+            scoreLbl.text = "\(score)"
+            firstBody.node?.removeFromParent()
+        }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        // Called before each frame is rendered
+        if gameStarted == true{
+            if died == false{
+                enumerateChildNodes(withName: "background", using: ({
+                    (node, error) in
+                    let bg = node as! SKSpriteNode
+                    bg.position = CGPoint(x: bg.position.x - 2, y: bg.position.y)
+                    if bg.position.x <= -bg.size.width {
+                        bg.position = CGPoint(x:bg.position.x + bg.size.width * 2, y:bg.position.y)
+                    }
+                }))
+            }
+        }
     }
 }
