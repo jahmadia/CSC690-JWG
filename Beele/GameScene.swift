@@ -8,6 +8,8 @@
 
 import SpriteKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
+        let verticalPipeGap = 250.0
+        let pipeDelay = 3.0
     
     var gameStarted = Bool(false)
     var died = Bool(false)
@@ -50,7 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.addChild(self.wallPair)
             })
             
-            let delay = SKAction.wait(forDuration: 1.5)
+            let delay = SKAction.wait(forDuration:pipeDelay)
             let SpawnDelay = SKAction.sequence([spawn, delay])
             let spawnDelayForever = SKAction.repeatForever(SpawnDelay)
             self.run(spawnDelayForever)
@@ -60,6 +62,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let removePipes = SKAction.removeFromParent()
             moveAndRemove = SKAction.sequence([movePipes, removePipes])
             
+             // setup physics
             bird.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             bird.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 40))
         } else {
@@ -107,6 +110,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func createScene(){
+          // setup physics
+        self.physicsWorld.gravity = CGVector( dx: 0.0, dy: -5.0 )
+        self.physicsWorld.contactDelegate = self
+        
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         self.physicsBody?.categoryBitMask = CollisionBitMask.groundCategory
         self.physicsBody?.collisionBitMask = CollisionBitMask.birdCategory

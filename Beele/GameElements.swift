@@ -8,6 +8,7 @@ struct CollisionBitMask {
 }
 
 extension GameScene{
+    
     func createBird() -> SKSpriteNode {
         let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("bird-01"))
         bird.size = CGSize(width: 50, height: 50)
@@ -90,7 +91,7 @@ extension GameScene{
     
     func createWalls() -> SKNode  {
         let flowerNode = SKSpriteNode(imageNamed: "flower")
-        flowerNode.size = CGSize(width: 40, height: 40)
+        flowerNode.size = CGSize(width: 50, height: 50)
         flowerNode.position = CGPoint(x: self.frame.width + 25, y: self.frame.height / 2)
         flowerNode.physicsBody = SKPhysicsBody(rectangleOf: flowerNode.size)
         flowerNode.physicsBody?.affectedByGravity = false
@@ -103,33 +104,33 @@ extension GameScene{
         wallPair = SKNode()
         wallPair.name = "wallPair"
         
-        let topWall = SKSpriteNode(imageNamed: "piller")
-        let btmWall = SKSpriteNode(imageNamed: "piller")
+        let pipeUp = SKSpriteNode(imageNamed: "piller")
+        let pipeDown = SKSpriteNode(imageNamed: "piller")
         
-        topWall.position = CGPoint(x: self.frame.width + 25, y: self.frame.height / 2 + 420)
-        btmWall.position = CGPoint(x: self.frame.width + 25, y: self.frame.height / 2 - 420)
+        pipeUp.position = CGPoint(x: self.frame.width + 25, y: self.frame.height / 2 + 420)
+        pipeDown.position = CGPoint(x: self.frame.width + 25, y: self.frame.height / 2 - 420)
         
-        topWall.setScale(0.5)
-        btmWall.setScale(0.5)
+        pipeUp.setScale(0.5)
+        pipeDown.setScale(0.5)
         
-        topWall.physicsBody = SKPhysicsBody(rectangleOf: topWall.size)
-        topWall.physicsBody?.categoryBitMask = CollisionBitMask.pillarCategory
-        topWall.physicsBody?.collisionBitMask = CollisionBitMask.birdCategory
-        topWall.physicsBody?.contactTestBitMask = CollisionBitMask.birdCategory
-        topWall.physicsBody?.isDynamic = false
-        topWall.physicsBody?.affectedByGravity = false
+        pipeUp.physicsBody = SKPhysicsBody(rectangleOf: pipeUp.size)
+        pipeUp.physicsBody?.categoryBitMask = CollisionBitMask.pillarCategory
+        pipeUp.physicsBody?.collisionBitMask = CollisionBitMask.birdCategory
+        pipeUp.physicsBody?.contactTestBitMask = CollisionBitMask.birdCategory
+        pipeUp.physicsBody?.isDynamic = false
+        pipeUp.physicsBody?.affectedByGravity = false
         
-        btmWall.physicsBody = SKPhysicsBody(rectangleOf: btmWall.size)
-        btmWall.physicsBody?.categoryBitMask = CollisionBitMask.pillarCategory
-        btmWall.physicsBody?.collisionBitMask = CollisionBitMask.birdCategory
-        btmWall.physicsBody?.contactTestBitMask = CollisionBitMask.birdCategory
-        btmWall.physicsBody?.isDynamic = false
-        btmWall.physicsBody?.affectedByGravity = false
+        pipeDown.physicsBody = SKPhysicsBody(rectangleOf: pipeDown.size)
+        pipeDown.physicsBody?.categoryBitMask = CollisionBitMask.pillarCategory
+        pipeDown.physicsBody?.collisionBitMask = CollisionBitMask.birdCategory
+        pipeDown.physicsBody?.contactTestBitMask = CollisionBitMask.birdCategory
+        pipeDown.physicsBody?.isDynamic = false
+        pipeDown.physicsBody?.affectedByGravity = false
         
-        topWall.zRotation = CGFloat(Double.pi)
+        pipeUp.zRotation = CGFloat(Double.pi)
         
-        wallPair.addChild(topWall)
-        wallPair.addChild(btmWall)
+        wallPair.addChild(pipeUp)
+        wallPair.addChild(pipeDown)
         
         wallPair.zPosition = 1
         
